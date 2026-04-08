@@ -118,7 +118,6 @@ foreach ($targetType in $types) {
             $totalCount++
             $docPath    = Join-Path $DesignDocBase "${docType}設計書.md"
             $outputPath = Join-Path $OutputBase "${docType}設計書レビュー.md"
-            $promptPath = Join-Path $OutputBase "${docType}設計書レビュー.prompt.txt"
 
             if (-not (Test-Path $docPath)) {
                 Write-Warning "  設計書が見つかりません（スキップ）: $docPath"
@@ -179,9 +178,6 @@ $criteriaContent
 - 機能設計書のレビューは観点1〜7を対象とし、8〜13はN/Aとする
 - 詳細設計書のレビューは観点8〜13（バッチは8〜14）を対象とし、1〜7はN/Aとする
 "@
-
-            # プロンプトをファイル保存（再利用・デバッグ用）
-            Set-Content -Path $promptPath -Value $prompt -Encoding UTF8
 
             Write-Host ""
             Write-Host "▶ レビュー中: ${targetType} > ${targetName} > ${docType}設計書" -ForegroundColor Cyan
