@@ -3,7 +3,7 @@
 ## プロジェクト概要
 
 このリポジトリは **仮想ECサイトの設計書** を管理し、
-GitHub Models API（`gpt-4o-mini`）を使って設計書を自動レビューする仕組みを提供します。
+GitHub Copilot SDK を使って設計書を自動レビューする仕組みを提供します。
 
 ---
 
@@ -30,7 +30,9 @@ C:\work\copilot-review\
 ├── レビュー結果\
 │   ├── 画面\{画面名}\{機能|詳細}設計書レビュー.md   ← AI生成
 │   └── バッチ\{バッチ名}\{機能|詳細}設計書レビュー.md ← AI生成
-└── Invoke-DesignReview.ps1       ← レビュー実行スクリプト
+├── design_review.py              ← Python レビュー実行本体
+├── requirements.txt              ← .venv 用 Python 依存関係
+└── Invoke-DesignReview.ps1       ← Python 起動ラッパー
 ```
 
 ---
@@ -69,7 +71,7 @@ cd C:\work\copilot-review
 | `-Type` | `画面` または `バッチ`（省略時は両方） | （両方） |
 | `-Name` | 対象フォルダ名（省略時は全フォルダ） | （全て） |
 | `-Doc` | `機能` / `詳細` / `all` | `all` |
-| `-Model` | 使用モデル名 | `gpt-4o-mini` |
+| `-Model` | 使用モデル名（省略時は Copilot 既定値） | （既定値） |
 | `-Force` | 既存レビュー結果を上書き | off |
 
 ---
@@ -89,5 +91,10 @@ git push
 
 ## 認証
 
-スクリプトは `gh auth token` で GitHub CLIのトークンを取得して API 認証を行います。
-`gh auth login` 済みであれば追加の設定は不要です。
+レビュー実行は `.venv` 上の Python から GitHub Copilot SDK を利用します。
+
+- 依存関係インストール: `.venv\Scripts\python.exe -m pip install -r requirements.txt`
+- 認証方法 1: `copilot auth login`
+- 認証方法 2: `COPILOT_GITHUB_TOKEN` / `GH_TOKEN` / `GITHUB_TOKEN` を設定
+
+`-Model` を省略した場合は、Copilot CLI または `GITHUB_COPILOT_MODEL` の既定値を利用します。
